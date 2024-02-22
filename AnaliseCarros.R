@@ -16,18 +16,18 @@ dados_limpos <- select(dados, -c(5,25))
 
   #MODELO
   #ANO
-  #ACESSÓRIOS: 
+  #ACESSÓRIOS:
 
-#[25] "AIR.BAG"               "ALARME"               
-#[27] "AR.CONDICIONADO"       "BLINDADO"             
-#[29] "CÂMERA.DE.RÉ"          "DIREÇÃO .HIDRÁULICA"   
-#[31] "SENSOR.DE.RÉ"          "SOM"                  
-#[33] "TRAVA.ELÉTRICA"        "VIDRO.ELÉTRICO"  
-
-
+#[25] "AIR.BAG"               "ALARME"
+#[27] "AR.CONDICIONADO"       "BLINDADO"
+#[29] "CÂMERA.DE.RÉ"          "DIREÇÃO .HIDRÁULICA"
+#[31] "SENSOR.DE.RÉ"          "SOM"
+#[33] "TRAVA.ELÉTRICA"        "VIDRO.ELÉTRICO"
 
 
-theme_set(theme_bw())
+
+
+theme_set(theme_light())
 
 #Grafico 1 - Linhas
 ##Médias dos valores ao longo do tempo
@@ -38,14 +38,14 @@ uf <- c("mt", "se")
 dados_filtrados <- dados_limpos %>% filter(MODELO == modelo &
                                              UF %in% uf)
 
-mediana_data <- dados_filtrados %>% group_by(DATA_COLETA_METADADOS, UF) %>% 
+mediana_data <- dados_filtrados %>% group_by(DATA_COLETA_METADADOS, UF) %>%
   summarise(mediaValor = median(VALOR))
 
 ggplotly(
 
 ggplot(mediana_data)+
   geom_line(aes(x = DATA_COLETA_METADADOS, y = mediaValor,
-                group = UF, color = UF), 
+                group = UF, color = UF),
             size = 1) +
   ggtitle("Média dos valores ao longo do tempo")
 
@@ -78,8 +78,8 @@ dados_filtrados %>% ggplot()+
 ## VARIAÇÃO PREÇOS POR UF E TIPO ANUNCIO(GRÁFICO DE BOXPLOT) com e sem outlier ####
 
 ggplotly(
-  
-dados_filtrados %>% 
+
+dados_filtrados %>%
   ggplot(aes(x = TIPO_ANUNCIO, y = VALOR,fill = UF))+
   geom_boxplot( ) +
   theme(legend.position="none")+
@@ -92,7 +92,7 @@ dados_filtrados %>%
 #Gráfico 5 - Pizza
 ## frequencia por cambio(GRÁFICO DE PIZZA) ####
 
-freq_cambio <- dados_filtrados %>% 
+freq_cambio <- dados_filtrados %>%
   group_by(CÂMBIO) %>%
   summarise(qtd = n()) %>%
   mutate(prop = qtd / sum(qtd) *100) %>%
@@ -100,14 +100,14 @@ freq_cambio <- dados_filtrados %>%
 
 ggplotly(
 
-freq_cambio %>%          
+freq_cambio %>%
   ggplot(aes(x="", y=prop, fill=CÂMBIO)) +
   geom_bar(stat="identity", width=1, color="white") +
   coord_polar("y", start=0) +
-  theme_void() + 
+  theme_void() +
   theme(legend.position="none") +
-  geom_text(aes(y = ypos, label = paste(CÂMBIO, '\n',round(prop,2),'%') ), 
-            color = "white", size=6)+ 
+  geom_text(aes(y = ypos, label = paste(CÂMBIO, '\n',round(prop,2),'%') ),
+            color = "white", size=6)+
   ggtitle("Quantidade por Câmbio")
 )
 
@@ -120,7 +120,7 @@ plot_ly(freq_cambio, labels = ~CÂMBIO, values = ~prop  , type = 'pie',
 
 #Gráfico 6 - Pizza
 ## frequencia por DIREÇÃO(GRÁFICO DE PIZZA) ####
-freq_direcao <- dados_filtrados %>% 
+freq_direcao <- dados_filtrados %>%
   group_by(DIREÇÃO) %>%
   summarise(qtd = n()) %>%
   mutate(prop = qtd / sum(qtd) *100) %>%
@@ -130,8 +130,8 @@ freq_direcao %>%
   ggplot(aes(x="", y=prop, fill=DIREÇÃO)) +
   geom_bar(stat="identity",width=10, size = 1, color = "white") +
   coord_polar("y", start=0) +
-  theme_void() + 
-  geom_text(aes(y = ypos, label = paste0(round(prop,1),'%') ), 
+  theme_void() +
+  geom_text(aes(y = ypos, label = paste0(round(prop,1),'%') ),
             color = "white", size=5)+
   ggtitle("Quantidade por Direção")
 
